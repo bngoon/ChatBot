@@ -1,5 +1,7 @@
-Django>=4.0,<5.0
-djangorestframework
+Django==3.2
+djangorestframework==3.12.4
 psycopg2-binary
 gunicorn
-openai
+openai>=1.0.0
+python-dotenv
+httpx
