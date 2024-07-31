@@ -1,0 +1,40 @@
+version: '3.8'
+
+services:
+  backend:
+    build:
+      context: ./server/backend
+      dockerfile: Dockerfile
+    volumes:
+      - ./server/backend:/app
+    ports:
+      - "8000:8000"
+    env_file:
+      - ./server/backend/.env
+    depends_on:
+      - db
+
+  client:
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+    volumes:
+      - ./client:/app
+    ports:
+      - "3000:3000"
+    env_file:
+      - ./client/.env
+    depends_on:
+      - backend
+
+  db:
+    image: postgres:13
+    environment:
+      POSTGRES_DB: chatbot
+      POSTGRES_USER: your-db-user
+      POSTGRES_PASSWORD: your-db-password
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:
