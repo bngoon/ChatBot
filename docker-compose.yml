@@ -21,7 +21,8 @@ services:
     volumes:
       - ./client:/app
     ports:
-      - "3000:3000"
+      - "5173:5173"
+
     env_file:
       - ./client/.env
     depends_on:
