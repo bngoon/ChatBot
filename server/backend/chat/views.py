@@ -1,39 +1,36 @@
-from rest_framework.views import APIView
-from rest_framework.response import Response
-from rest_framework import status
-from .models import ChatMessage
-from .serializers import ChatMessageSerializer
-from openai import OpenAI
+from django.http import JsonResponse
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import IsAuthenticated
+import google.generativeai as gemini
 import os
-from dotenv import load_dotenv
-import asyncio
+import json
 
-# Load environment variables from .env file
-load_dotenv()
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def chat_view(request):
+    # Extract the message from the request body
+    data = json.loads(request.body)
+    message = data.get('message', '')
 
-class ChatMessageView(APIView):
-    def post(self, request):
-        message = request.data.get('message')
-        if not message:
-            return Response({"error": "Message is required"}, status=status.HTTP_400_BAD_REQUEST)
-        response = asyncio.run(self.get_chat_response(message))
-        if response is None:
-            return Response({"error": "Failed to get response from AI"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-        chat_message = ChatMessage.objects.create(message=message, response=response)
-        serializer = ChatMessageSerializer(chat_message)
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    if not message:
+        return JsonResponse({'error': 'Message is required'}, status=400)
 
-    async def get_chat_response(self, message):
-        try:
-            client = OpenAI(api_key=os.environ.get("OPENAI_API_KEY"))
-            response = await client.chat.completions.create(
-                messages=[
-                    {"role": "system", "content": "You are a helpful assistant."},
-                    {"role": "user", "content": message}
-                ],
-                model="gpt-3.5-turbo"
-            )
-            return response.choices[0].message.content.strip()
-        except Exception as e:
-            print(f"Error in OpenAI API call: {e}")
-            return None
+    try:
+        # Retrieve your API key or credentials from environment variables
+        api_key = os.getenv('GOOGLE_GEMINI_API_KEY')
+
+        if not api_key:
+            return JsonResponse({'error': 'API key is missing'}, status=500)
+
+        # Initialize the Gemini client
+        gemini_client = gemini.Client(api_key)
+
+        # Call the Gemini API
+        response = gemini_client.chat(message)
+
+        # Extract the response from the Gemini API
+        bot_response = response.get('response', 'No response from bot')
+
+        return JsonResponse({'response': bot_response}, status=200)
+    except Exception as e:
+        return JsonResponse({'error': str(e)}, status=500)

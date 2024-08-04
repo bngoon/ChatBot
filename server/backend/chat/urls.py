@@ -1,6 +1,6 @@
 from django.urls import path
-from .views import ChatMessageView
+from . import views
 
 urlpatterns = [
-    path('chat/', ChatMessageView.as_view(), name='chat'),
+    path('chat/', views.chat_view, name='chat'),  # Endpoint for chat functionality
 ]

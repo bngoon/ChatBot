@@ -4,6 +4,7 @@ import Header from './components/Header/Header';
 import Home from './components/Home/Home';
 import Chat from './components/Chat/Chat';
 import './App.css';
+
 export default function App() {
   return (
     <Router>
