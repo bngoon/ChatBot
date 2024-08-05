@@ -45,17 +45,18 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'corsheaders',
     'rest_framework',
-    'rest_framework_simplejwt.token_blacklist',
     'chat',  # Your chat application
 ]
 
 # REST framework settings
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
-        'rest_framework_simplejwt.authentication.JWTAuthentication',
+        # Use session authentication or other methods as needed
+        'rest_framework.authentication.SessionAuthentication',  # Use session-based authentication
+        'rest_framework.authentication.BasicAuthentication',  # Optional: basic authentication
     ],
     'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.IsAuthenticated',  # Ensure endpoints are protected
+        'rest_framework.permissions.AllowAny',  # Allow any request (change this for specific protection)
     ],
 }
 

@@ -7,5 +7,3 @@ python-dotenv
 httpx
 google-generativeai
 django-cors-headers
-rest_framework_simplejwt
-djangorestframework-simplejwt
