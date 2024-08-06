@@ -49,6 +49,12 @@ export default function Chat() {
     }
   };
 
+  const handleKeyPress = (event) => {
+    if (event.key === 'Enter') {
+      handleSend();
+    }
+  };
+
   return (
     <div className="chat-container">
       <div className="messages">
@@ -68,6 +74,7 @@ export default function Chat() {
           type="text"
           value={message}
           onChange={(e) => setMessage(e.target.value)}
+          onKeyPress={handleKeyPress}
           placeholder="Type your message..."
         />
         <button onClick={handleSend}>Send</button>

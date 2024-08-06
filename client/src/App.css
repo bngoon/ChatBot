@@ -2,6 +2,7 @@ html, body, #root {
     height: 100%;
     margin: 0;
     padding: 0;
+    overflow: hidden;
     background-color: #fff; /* Ensure the body has a white background */
     color: #000;
     font-family: Arial, sans-serif;

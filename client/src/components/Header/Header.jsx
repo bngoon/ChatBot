@@ -1,4 +1,7 @@
+// Header.jsx
+
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { SignedIn, SignedOut, SignInButton, UserButton } from '@clerk/clerk-react';
 import './Header.css';
 
@@ -14,6 +17,12 @@ export default function Header() {
           {/* Displays user account management options when the user is signed in */}
           <UserButton className="user-button" />
         </SignedIn>
+      </div>
+      <div className="navigation">
+        {/* Navigation Button to /chat */}
+        <Link to="/chat">
+          <button className="chat-button">Go to Chat</button>
+        </Link>
       </div>
     </header>
   );
