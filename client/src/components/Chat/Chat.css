@@ -8,7 +8,7 @@
     margin: 0 auto;
     padding: 1rem;
     border: 1px solid #ddd;
-    background-color: #fff; /* Ensure the chat container has a white background */
+    background-color: #fff; /* chat container background */
     color: #000;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     border-radius: 10px;
