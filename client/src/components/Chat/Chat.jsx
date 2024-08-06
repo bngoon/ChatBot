@@ -9,8 +9,13 @@ export default function Chat() {
 
   const handleSend = async () => {
     if (message.trim()) {
+      const timestamp = new Date().toLocaleString(); // Capture the current timestamp
+
       // Add the user's message to the chat
-      setMessages((prevMessages) => [...prevMessages, { text: message, fromUser: true }]);
+      setMessages((prevMessages) => [
+        ...prevMessages,
+        { text: message, fromUser: true, timestamp, source: 'You ' }
+      ]);
       setMessage('');
 
       // Indicate that the bot is thinking
@@ -32,16 +37,20 @@ export default function Chat() {
         // Log the response for debugging
         console.log('API Response:', response.data);
 
+        // Capture the timestamp for the bot's response
+        const botTimestamp = new Date().toLocaleString();
+
         // Add the bot's response to the chat
         setMessages((prevMessages) => [
           ...prevMessages,
-          { text: response.data.response, fromUser: false },
+          { text: response.data.response, fromUser: false, timestamp: botTimestamp, source: 'Gemini ' }
         ]);
       } catch (error) {
         console.error('Error sending message:', error.response ? error.response.data : error.message);
+        const errorTimestamp = new Date().toLocaleString();
         setMessages((prevMessages) => [
           ...prevMessages,
-          { text: 'Error: Unable to get a response from the bot', fromUser: false },
+          { text: 'Error: Unable to get a response from the bot', fromUser: false, timestamp: errorTimestamp, source: 'Error' }
         ]);
       } finally {
         setLoading(false);
@@ -60,12 +69,16 @@ export default function Chat() {
       <div className="messages">
         {messages.map((msg, index) => (
           <div key={index} className={msg.fromUser ? 'message user-message' : 'message bot-message'}>
-            {msg.text}
+            <div className="message-info">
+              <span className="message-source">{msg.source}</span>
+              <span className="message-timestamp">{msg.timestamp}</span>
+            </div>
+            <div className="message-text">{msg.text}</div>
           </div>
         ))}
         {loading && (
           <div className="message bot-message">
-            The bot is thinking...
+            Gemini is thinking...
           </div>
         )}
       </div>
